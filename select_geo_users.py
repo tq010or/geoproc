@@ -6,7 +6,8 @@ Given all geo tweet info (e.g.,
 import os
 import sys
 import geo_finder
-from collections import Counter
+#TODO: resolve python 2.6 issue
+#from collections import Counter
 
 try:
     import ujson as json
@@ -15,9 +16,19 @@ except ImportError:
 
 gdict = dict();
 
+#def get_most_common_item(lst):
+#    data = Counter(lst)
+#    return data.most_common(1)[0]
+
 def get_most_common_item(lst):
-    data = Counter(lst)
-    return data.most_common(1)[0]
+    tmp_dict = dict()
+    for i in lst:
+        try:
+            tmp_dict[i] += 1
+        except KeyError:
+            tmp_dict[i] = 1
+    sorted_lst = sorted(tmp_dict.iteritems(), key = lambda k:k[1], reverse = True)
+    return sorted_lst[0]
 
 def merge_dict(udict):
     global gdict
@@ -68,8 +79,9 @@ def main():
     json.dump(selected_users, open(output_file, "w"))
 
 def _unit_test():
-    lst = [1, 2, 3, 4, 1, 2, 3, 5, 2, None, None, None, None, None]
+    lst = [2, 2, 2, 1, 2, 3, 4, 1, 2, 3, 5, 2, None, None, None, None, None]
     print get_most_common_item(lst)
 
 if __name__ == "__main__":
+    #_unit_test()
     main()
