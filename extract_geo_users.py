@@ -15,6 +15,42 @@ except ImportError:
 
 udict = dict();
 
+def proc_twitter(jobj):
+    if "geo" not in jobj:
+        continue
+    geo = jobj["geo"]
+    if not geo:
+        continue
+    coords = geo["coordinates"]
+    lat = coords[0]
+    lon = coords[1]
+    user = jobj["user"]
+    lang = user["lang"]
+    location = user["location"]
+    uid = user["id"]
+    return (uid, lat, lon, lang, location)
+
+def proc_gnip(jobj):
+    if "geo" not in jobj:
+        continue
+    geo = jobj["geo"]
+    if not geo:
+        continue
+    coords = geo["coordinates"]
+    lat = coords[0]
+    lon = coords[1]
+    if lat == 0 and lon == 0:
+        return None
+    user = jobj["actor"]
+    location = user["location"]
+    if location:
+        location = location["displayName"]
+    lang = user["languages"]
+    if lang:
+        lang = lang[0]
+    uid = user["id"].split(":")[-1]
+    return (uid, lat, lon, lang, location)
+
 def main():
     counter = 0
     acc_counter = 0
@@ -30,18 +66,18 @@ def main():
             jobj = json.loads(l)
         except ValueError:
             continue
-        if "geo" not in jobj:
+
+        extracted_data = None
+        if "user" in jobj:
+            extracted_data = proc_twitter(jobj)
+        elif "actor" in jobj:
+            extracted_data = proc_gnip(jobj)
+        else:
+            pass
+
+        if not extracted_data:
             continue
-        geo = jobj["geo"]
-        if not geo:
-            continue
-        coords = geo["coordinates"]
-        lat = coords[0]
-        lon = coords[1]
-        user = jobj["user"]
-        lang = user["lang"]
-        location = user["location"]
-        uid = user["id"]
+        uid, lat, lon, lang, location = extracted_data
         if uid not in udict:
             udict[uid] = list()
         udict[uid].append((lat, lon, lang, location))
