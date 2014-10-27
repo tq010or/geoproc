@@ -18,7 +18,11 @@ udict = dict();
 def main():
     output_file = sys.argv[1]
     for l in sys.stdin:
-        jobj = json.loads(l)
+        try:        
+            jobj = json.loads(l)
+        except ValueError:
+            print l
+            continue
         if "geo" not in jobj:
             continue
         geo = jobj["geo"]
