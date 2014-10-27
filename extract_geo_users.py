@@ -19,6 +19,7 @@ def main():
     counter = 0
     acc_counter = 0
     output_file = sys.argv[1]
+    print output_file
     for l in sys.stdin:
         counter += 1
         if counter == 10000:
