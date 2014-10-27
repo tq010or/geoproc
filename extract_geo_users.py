@@ -22,14 +22,13 @@ def main():
     print output_file
     for l in sys.stdin:
         counter += 1
-        if counter == 10000:
+        if counter == 1000000:
             acc_counter += counter;
             counter = 0
             print str(acc_counter) + " processed in " + output_file;
         try:        
             jobj = json.loads(l)
         except ValueError:
-            print l
             continue
         if "geo" not in jobj:
             continue
