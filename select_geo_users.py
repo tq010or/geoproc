@@ -28,30 +28,32 @@ def merge_dict(udict):
             gdict[uid] = udict[uid]
 
 def rule1(ulist):
-    # more than 5 geotagged tweets and at least 3 are from one location
-    if len(ulist) < 5:
-        return False
+    # more than 7 geotagged tweets and at least 4 are from one location
+    if len(ulist) < 7:
+        return None
     loc_list = [geo_finder.lookup_city(coords[0], coords[1]) for coords in ulist]
     item, freq = get_most_common_item(loc_list)
-    if not item or freq < 3:
-        return False
-    return True
+    if not item or freq < 4:
+        return None
+    return item
 
 def rule2():
     # most frequent geotagged tweet location agree with user-declared location
-    pass
+    return False
 
 def rule3():
     # has to be english
     return False
 
 def select_users():
-    selected_users = []
+    selected_users = dict()
     for uid in gdict:
         ulist = gdict[uid]
-        flag = rule1(ulist) | rule2(ulist) | rule3(ulist)
-        if flag:
-            select_users.append(uid)
+        #TODO; add multiple ordered rules for filtering
+        #flag = rule1(ulist) | rule2(ulist) | rule3(ulist)
+        loc = rule1(ulist)
+        if loc:
+            select_users[str(uid)] = loc
     return selected_users
 
 
@@ -64,6 +66,10 @@ def main():
     selected_users = select_users()
     print len(selected_users), "users are selected"
     json.dump(selected_users, open(output_file, "w"))
+
+def _unit_test():
+    lst = [1, 2, 3, 4, 1, 2, 3, 5, 2, None, None, None, None, None]
+    print get_most_common_item(lst)
 
 if __name__ == "__main__":
     main()
