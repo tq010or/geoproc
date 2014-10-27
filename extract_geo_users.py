@@ -16,8 +16,15 @@ except ImportError:
 udict = dict();
 
 def main():
+    counter = 0
+    acc_counter = 0
     output_file = sys.argv[1]
     for l in sys.stdin:
+        counter += 1
+        if counter == 10000:
+            acc_counter += counter;
+            counter = 0
+            print str(acc_counter) + " processed in " + output_file;
         try:        
             jobj = json.loads(l)
         except ValueError:
