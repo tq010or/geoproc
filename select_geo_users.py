@@ -72,7 +72,7 @@ def main():
     output_file = sys.argv[1]
     for geo_file in sys.stdin:
         print "merging", geo_file
-        merge_dict(json.load(open(geo_file)))
+        merge_dict(json.load(open(geo_file.strip())))
     print "merging done"
     selected_users = select_users()
     print len(selected_users), "users are selected"
