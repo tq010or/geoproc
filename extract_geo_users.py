@@ -42,8 +42,10 @@ def proc_gnip(jobj):
     if lat == 0 and lon == 0:
         return None
     user = jobj["actor"]
+    location = None
     if "location" in user:
         location = user["location"]["displayName"]
+    lang = None
     if "languages" in user:
         lang = user["languages"][0]
     uid = user["id"].split(":")[-1]
