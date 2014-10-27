@@ -34,7 +34,7 @@ def merge_dict(udict):
     global gdict
     for uid in udict:
         if uid in gdict:
-            gdict[uid].extends(udict[uid])
+            gdict[uid].extend(udict[uid])
         else:
             gdict[uid] = udict[uid]
 
