@@ -16,13 +16,25 @@ except ImportError:
 udict = dict();
 
 def main():
+    output_file = sys.argv[1]
     for l in sys.stdin:
         jobj = json.loads(l)
-        if "coordinates" not in jobj:
+        if "geo" not in jobj:
             continue
-        if jobj["coordinates"]:
-            print l
-            break
+        geo = jobj["geo"]
+        if not geo:
+            continue
+        coords = geo["coordinates"]
+        lat = coords[0]
+        lon = coords[1]
+        user = jobj["user"]
+        lang = user["lang"]
+        location = user["location"]
+        uid = user["id"]
+        if uid not in udict:
+            udict[uid] = list()
+        udict[uid].append((lat, lon, lang, location))
+    json.dump(udict, open(output_file, "w"))
 
 if __name__ == "__main__":
     main()
