@@ -17,10 +17,10 @@ udict = dict();
 
 def proc_twitter(jobj):
     if "geo" not in jobj:
-        continue
+        return None
     geo = jobj["geo"]
     if not geo:
-        continue
+        return None
     coords = geo["coordinates"]
     lat = coords[0]
     lon = coords[1]
@@ -32,10 +32,10 @@ def proc_twitter(jobj):
 
 def proc_gnip(jobj):
     if "geo" not in jobj:
-        continue
+        return None
     geo = jobj["geo"]
     if not geo:
-        continue
+        return None
     coords = geo["coordinates"]
     lat = coords[0]
     lon = coords[1]
