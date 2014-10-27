@@ -18,6 +18,8 @@ udict = dict();
 def main():
     for l in sys.stdin:
         jobj = json.loads(l)
+        if "coordinates" not in jobj:
+            continue
         if jobj["coordinates"]:
             print l
             break
