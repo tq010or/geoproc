@@ -18,7 +18,7 @@ udict = dict();
 def main():
     for l in sys.stdin:
         jobj = json.loads(l)
-        if jobj["geo"]:
+        if jobj["coordinates"]:
             print l
             break
 
