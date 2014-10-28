@@ -64,7 +64,7 @@ def select_users():
         #flag = rule1(ulist) | rule2(ulist) | rule3(ulist)
         loc = rule1(ulist)
         if loc:
-            select_users[str(uid)] = loc
+            selected_users[str(uid)] = loc
     return selected_users
 
 
