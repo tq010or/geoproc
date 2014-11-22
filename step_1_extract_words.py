@@ -7,17 +7,25 @@ Output: word-count JSON
 
 import sys
 import tokeniser
+import json
 
 t_tokeniser = tokeniser.MicroTokeniser()
 output_file = sys.argv[1]
 
 def filter_words(word):
-    pass
+    if word.isalpha():
+	return True
+    elif word.startswith("#"):
+	return True
+    elif word.startswith("@"):
+	return True
+    else:
+	return False
 
 def main():
     word_dict = dict()
     for l in sys.stdin:
-        words = [word for word in t_tokeniser.tokenise(l.strip().lower()) if filter_words(word)]
+        words = [word for word in t_tokeniser.tokenise(l[1:-1].strip().lower()) if filter_words(word)]
         for word in words:
             try:
                 word_dict[word] += 1
