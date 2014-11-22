@@ -7,7 +7,6 @@ Output: line json records
 
 import os
 import sys
-from collections import Counter
 from datetime import datetime
 
 try:
@@ -24,7 +23,7 @@ def get_wnd_id(ts, fmt):
     """    Map GNIP/Tweet tweet time to a particular window (determined by start time and window size)    """
     cur_time = datetime.strptime(ts, fmt)
     wnd_id = cur_time.strftime("%Y%m%d")
-    return wnd_id
+    return int(wnd_id)
 
 def proc_twitter(jobj):
     user = jobj["user"]
@@ -35,11 +34,11 @@ def proc_twitter(jobj):
     coords = geo_finder.lookup_coords(loc)
     lat = coords[0]
     lon = coords[1]
-    tid = job["id_str"]
+    tid = jobj["id_str"]
     tweet = jobj["text"]
     # date fmt: Sun Jun 20 22:56:08 +0000 2010
     time_stamp = get_wnd_id(jobj["created_at"], "%a %b %d %H:%M:%S +0000 %Y")
-    return (uid, tid, loc, lat, lon, time_stamp, tweet)
+    return (time_stamp, tid, loc, lat, lon, tweet)
     
 def proc_gnip(jobj):
     user = jobj["actor"]
@@ -59,7 +58,7 @@ def proc_gnip(jobj):
     tweet = jobj["body"]
     # date fmt: 2014-08-02T01:08:03.000Z
     time_stamp = get_wnd_id(jobj["postedTime"][:-5], "%Y-%m-%dT%H:%M:%S")
-    return (uid, tid, loc, lat, lon, time_stamp, tweet)
+    return (time_stamp, tid, loc, lat, lon, tweet)
 
 def main():
     global udict 
